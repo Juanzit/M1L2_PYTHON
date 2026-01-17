@@ -1,21 +1,39 @@
+import discord
+import random  
 
-import random 
+intents = discord.Intents.default()
+intents.message_content = True
 
-#Crie uma variável que contenha todos os caracteres que a senha do usuário pode ter
-#Por exemplo: "+-/*!&$#?=@abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+client = discord.Client(intents=intents)
 
-elementos = "+-/*!&$#?=@abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
-comprimento = int(input("digite o tamanho da senha"))
+@client.event
+async def on_ready():
+    print(f'Você logou como {client.user}')
 
-senha = ""
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
 
-for i in range(comprimento):
-    senha = senha + random.choice(elementos)
-print(senha)
-#Crie uma variável e peça ao usuário que insira o comprimento da senha
- 
-#Crie uma variável na qual o programa armazenará a senha gerada
- 
-#Use um loop e a biblioteca random para selecionar um caractere aleatório da variável de caracteres e adicioná-lo à variável da senha gerada
- 
-#Exiba a senha resultante no console
+    if message.content.startswith('$hello'):
+        await message.channel.send(f'Olá! eu sou um bot {client.user}!')
+
+    elif message.content.startswith('$heh'):
+        if len(message.content) > 4:
+            count_heh = int(message.content[4:])
+        else:
+            count_heh = 5
+        await message.channel.send("he" * count_heh)
+
+    elif message.content.startswith('$dado'):
+        partes = message.content.split()
+        
+        if len(partes) > 1:
+            lados = int(partes[1]) 
+        else:
+            lados = 6 
+            
+        numero = random.randint(1, lados)
+        await message.channel.send(f'Você rolou um d{lados} e tirou: {numero}')
+#Blabla
+client.run("insira seu token agui")
